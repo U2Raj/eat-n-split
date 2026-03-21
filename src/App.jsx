@@ -1,15 +1,26 @@
 import { Children, useState } from "react";
 import { initialFriends } from "./Constants";
 
+
+function Button({ onClickProp,children }) {
+  return <button className="button" onClick={onClickProp}>
+    {children}
+  </button>;
+}
+
 export default function App() {
   const [isAddFriendFormOpen, setIsAddFriendFormOpen] = useState(false);
   const [isFriendSelected, setIsFriendSelected] = useState(false);
+  const [friends, setFriends] = useState(initialFriends);
 
+  function handleAddFriend(newFriend) {
+    setFriends((friends) => [...friends, newFriend]);
+  }
   return (
     <div className="app">
       <div className="sidebar">
-        <FriendList isFriendSelected={isFriendSelected} onFriendSelected={setIsFriendSelected}/>
-        {isAddFriendFormOpen && <FormAddFriend />}
+        <FriendList isFriendSelected={isFriendSelected} onFriendSelected={setIsFriendSelected} friends={friends} />
+        {isAddFriendFormOpen && <FormAddFriend onAddFriend={handleAddFriend} />}
         <Button onClickProp={() => setIsAddFriendFormOpen((open) => !open)}>
           {isAddFriendFormOpen ? "Close" : "Add Friend"}
         </Button>
@@ -19,8 +30,7 @@ export default function App() {
   );
 }
 
-function FriendList({ isFriendSelected, onFriendSelected }) {
-  const friends = initialFriends;
+function FriendList({ isFriendSelected, onFriendSelected, friends }) {
 
   return (
     <ul>
@@ -52,20 +62,34 @@ function Friend({ friend, isFriendSelected, onFriendSelected }) {
   );
 }
 
-function Button({ onClickProp,children }) {
-  return <button className="button" onClick={onClickProp}>
-    {children}
-  </button>;
-}
+function FormAddFriend({ onAddFriend }) {
+  const [friendName, setFriendName] = useState("");
+  const [friendImage, setFriendImage] = useState("https://i.pravatar.cc/48");
+  
+  function handleSubmit(e) {
+    e.preventDefault(); //To prevent the page reload
+    if (!friendName || !friendImage) return;
 
-function FormAddFriend() {
+    const id = crypto.randomUUID(); //To generate a unique id for the new friend
+    const newFriend = {
+      id,
+      name: friendName,
+      image: `https://i.pravatar.cc/48?u=${id}`,
+      balance: 0,
+    };
+
+    onAddFriend(newFriend);
+    setFriendName("");
+    setFriendImage("https://i.pravatar.cc/48");
+  }
+
   return (
     <form className="form-add-friend">
       <label>👫 Friend Name</label>
-      <input type="text" />
+      <input type="text" value={friendName} onChange={(e) => setFriendName(e.target.value)} />
       <label>🌆 Image URL</label>
-      <input type="text" />
-      <Button>Add</Button>
+      <input type="text" value={friendImage} onChange={(e) => setFriendImage(e.target.value)} />
+      <Button onClickProp={handleSubmit}>Add</Button>
     </form>
   );
 }
