@@ -15,6 +15,7 @@ export default function App() {
 
   function handleAddFriend(newFriend) {
     setFriends((friends) => [...friends, newFriend]);
+    setIsAddFriendFormOpen(false);
   }
   return (
     <div className="app">
