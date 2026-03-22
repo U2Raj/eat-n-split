@@ -1,11 +1,57 @@
+@import url('https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;1,9..144,300&display=swap');
+
+/* ═══════════════════════════════════════════
+   TOKENS
+═══════════════════════════════════════════ */
 :root {
-  --color-lightest: #fff4e6;
-  --color-light: #ffe8cc;
-  --color-medium: #ffa94d;
-  --color-dark: #ff922b;
+  /* Canvas */
+  --bg-base:        #0f1117;
+  --bg-panel:       #161b27;
+  --bg-card:        #1c2333;
+  --bg-card-hover:  #212840;
+  --bg-input:       #131825;
+  --bg-selected:    #1e2d4a;
+
+  /* Borders */
+  --border:         rgba(255,255,255,0.07);
+  --border-strong:  rgba(255,255,255,0.13);
+  --border-accent:  rgba(99,160,255,0.45);
+
+  /* Accent — cool blue-indigo */
+  --accent:         #4f8ef7;
+  --accent-hover:   #3a7df5;
+  --accent-glow:    rgba(79,142,247,0.18);
+
+  /* Semantics — balance indicators */
+  --green:          #34c97a;   /* friend owes YOU → good for you */
+  --green-bg:       rgba(52,201,122,0.10);
+  --green-border:   rgba(52,201,122,0.25);
+
+  --red:            #f05b5b;   /* YOU owe friend → you're in debt */
+  --red-bg:         rgba(240,91,91,0.10);
+  --red-border:     rgba(240,91,91,0.25);
+
+  --neutral:        #8899b4;
+
+  /* Text */
+  --text-primary:   #e8edf7;
+  --text-secondary: #8899b4;
+  --text-muted:     #4d5f7a;
+
+  /* Radii & shadows */
+  --r-sm:   6px;
+  --r-md:   12px;
+  --r-lg:   18px;
+  --r-xl:   24px;
+
+  --shadow-card: 0 2px 8px rgba(0,0,0,0.35), 0 1px 2px rgba(0,0,0,0.2);
+  --shadow-pop:  0 8px 32px rgba(0,0,0,0.5), 0 2px 8px rgba(0,0,0,0.3);
 }
 
-* {
+/* ═══════════════════════════════════════════
+   RESET & BASE
+═══════════════════════════════════════════ */
+*, *::before, *::after {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
@@ -13,158 +59,373 @@
 
 html {
   font-size: 62.5%;
-  font-family:
-    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu,
-    Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+  font-family: 'Sora', system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  color-scheme: dark;
 }
 
 body {
   min-height: 100dvh;
-  color: #495057;
+  background-color: var(--bg-base);
+
+  /* Subtle radial glow in corner */
+  background-image:
+    radial-gradient(ellipse 70% 55% at 5% 5%,  rgba(79,142,247,0.06) 0%, transparent 55%),
+    radial-gradient(ellipse 50% 40% at 95% 95%, rgba(79,142,247,0.04) 0%, transparent 50%);
+
+  color: var(--text-primary);
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
+  padding: 5rem 2rem;
 }
 
+/* ─── Wordmark ───────────────────────────── */
+body::before {
+  content: 'SplitWise';
+  font-family: 'Fraunces', Georgia, serif;
+  font-style: italic;
+  font-size: 1.5rem;
+  font-weight: 300;
+  letter-spacing: 0.12em;
+  color: var(--accent);
+  opacity: 0.75;
+  margin-bottom: 4.8rem;
+  text-transform: uppercase;
+}
+
+/* ═══════════════════════════════════════════
+   LAYOUT
+═══════════════════════════════════════════ */
 .app {
-  min-height: 66vh;
+  width: 100%;
+  max-width: 92rem;
   display: grid;
-  grid-template-columns: 37rem 44rem;
-  column-gap: 4rem;
+  grid-template-columns: 36rem 1fr;
+  column-gap: 3rem;
   align-items: start;
 }
 
+/* ═══════════════════════════════════════════
+   BUTTON
+═══════════════════════════════════════════ */
 .button {
-  background-color: var(--color-medium);
-  color: #343a40;
-  padding: 0.8rem 1.2rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+
+  background: var(--accent);
+  color: #ffffff;
   border: none;
-  border-radius: 7px;
-  font-weight: bold;
+  border-radius: var(--r-sm);
+  padding: 0.8rem 1.6rem;
+  font-family: 'Sora', sans-serif;
+  font-size: 1.25rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
   cursor: pointer;
-  transition: 0.3s;
+  white-space: nowrap;
+
+  transition: background 0.18s, transform 0.14s, box-shadow 0.18s;
+  box-shadow: 0 1px 4px rgba(79,142,247,0.3);
 }
 
 .button:hover {
-  background-color: var(--color-dark);
+  background: var(--accent-hover);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px rgba(79,142,247,0.4);
 }
 
+.button:active {
+  transform: translateY(0);
+  box-shadow: 0 1px 4px rgba(79,142,247,0.25);
+}
+
+/* ═══════════════════════════════════════════
+   SIDEBAR
+═══════════════════════════════════════════ */
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+/* Friend list container */
 .sidebar ul {
   list-style: none;
   display: flex;
   flex-direction: column;
   gap: 0.4rem;
   font-size: 1.4rem;
-  margin-bottom: 2rem;
+
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--r-xl);
+  padding: 1rem;
+  box-shadow: var(--shadow-card);
 }
 
+/* ─── Friend row ─────────────────────────── */
 .sidebar li {
   display: grid;
-  grid-template-columns: 4.8rem 1fr auto;
+  grid-template-columns: 4.4rem 1fr auto;
   align-items: center;
-  column-gap: 1.6rem;
+  column-gap: 1.4rem;
 
-  padding: 1.2rem;
-  border-radius: 7px;
-  transition: 0.5s;
+  padding: 1.1rem 1.2rem;
+  border-radius: var(--r-md);
+  cursor: pointer;
+  position: relative;
+  transition: background 0.2s ease;
+  border: 1px solid transparent;
 }
 
-.selected,
 .sidebar li:hover {
-  background-color: var(--color-lightest);
+  background: var(--bg-card-hover);
+  border-color: var(--border);
 }
 
+.selected {
+  background: var(--bg-selected) !important;
+  border-color: var(--border-accent) !important;
+  box-shadow: inset 0 0 0 1px rgba(99,160,255,0.12), 0 0 20px rgba(79,142,247,0.08);
+}
+
+/* Avatar */
 .sidebar li img {
+  width: 4.4rem;
+  height: 4.4rem;
   border-radius: 50%;
-  width: 100%;
   grid-row: span 2;
+  object-fit: cover;
+  border: 2px solid var(--border-strong);
+  transition: border-color 0.2s;
 }
 
+.sidebar li:hover img,
+.selected img {
+  border-color: var(--accent);
+}
+
+/* Name */
 .sidebar li h3 {
   grid-row: 1;
   grid-column: 2;
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  line-height: 1.2;
 }
 
+/* Balance text */
 .sidebar li p {
   grid-row: 2;
   grid-column: 2;
+  font-size: 1.2rem;
+  font-weight: 400;
+  line-height: 1.4;
+  margin-top: 0.15rem;
 }
 
+/* Row button */
 .sidebar li .button {
   grid-row: span 2;
   grid-column: 3;
+  font-size: 1.1rem;
+  padding: 0.6rem 1.1rem;
+  border-radius: var(--r-sm);
 }
 
+/* "Add Friend" button below list */
 .sidebar > .button {
-  float: right;
-  margin-right: 1.2rem;
+  align-self: flex-end;
 }
 
+/* ─── Balance states ─────────────────────── 
+   GREEN = friend owes you (money coming IN)  
+   RED   = you owe friend (money going OUT)   
+─────────────────────────────────────────── */
 .green {
-  color: #66a80f;
+  color: var(--green);
+  font-weight: 500;
 }
 
 .red {
-  color: #e03131;
+  color: var(--red);
+  font-weight: 500;
 }
 
+/* Color-coded pill behind the balance line */
+.sidebar li p.green {
+  background: var(--green-bg);
+  border: 1px solid var(--green-border);
+  border-radius: 99px;
+  padding: 0.2rem 0.8rem;
+  display: inline-block;
+  font-size: 1.15rem;
+}
+
+.sidebar li p.red {
+  background: var(--red-bg);
+  border: 1px solid var(--red-border);
+  border-radius: 99px;
+  padding: 0.2rem 0.8rem;
+  display: inline-block;
+  font-size: 1.15rem;
+}
+
+/* ═══════════════════════════════════════════
+   FORMS
+═══════════════════════════════════════════ */
 form {
-  font-size: 1.6rem;
+  font-size: 1.5rem;
   display: grid;
   align-items: center;
-  gap: 1.2rem;
+  gap: 1.4rem;
 
-  background-color: var(--color-lightest);
-  border-radius: 7px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--r-xl);
+  box-shadow: var(--shadow-pop);
+
+  animation: slideIn 0.22s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@keyframes slideIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
 .form-add-friend {
   grid-template-columns: 1fr 1.5fr;
-  margin-bottom: 1.6rem;
-  padding: 1.2rem;
+  padding: 2.2rem 2.4rem;
 }
+
 .form-split-bill {
   grid-template-columns: 1fr 12rem;
-  padding: 3.2rem 4rem;
+  padding: 3.2rem 3.6rem;
 }
 
+/* Labels */
 label {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 1.3rem;
   font-weight: 500;
+  color: var(--text-secondary);
+  letter-spacing: 0.02em;
 }
 
-label::first-letter {
-  display: inline-block;
-  margin-right: 4px;
-  font-size: 1.8rem;
+label svg {
+  flex-shrink: 0;
+  color: var(--accent);
+  opacity: 0.8;
 }
 
+/* Inputs & selects */
 input,
 select {
-  font-family: inherit;
-  color: inherit;
-  font-size: 1.5rem;
-  padding: 0.7rem;
-  text-align: center;
-  border: 1px solid var(--color-light);
-  border-radius: 4px;
-  transition: 0.3s;
+  font-family: 'Sora', inherit;
+  font-size: 1.4rem;
+  font-weight: 400;
+  color: var(--text-primary);
+  background: var(--bg-input);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--r-sm);
+  padding: 0.9rem 1.2rem;
+  width: 100%;
+  transition: border-color 0.18s, box-shadow 0.18s, background 0.18s;
+  appearance: none;
+}
+
+input::placeholder {
+  color: var(--text-muted);
+}
+
+input:hover,
+select:hover {
+  border-color: rgba(255,255,255,0.2);
 }
 
 input:focus,
 select:focus {
   outline: none;
-  border: 1px solid var(--color-dark);
+  border-color: var(--accent);
+  background: rgba(79,142,247,0.05);
+  box-shadow: 0 0 0 3px var(--accent-glow);
 }
 
+input:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+select option {
+  background: var(--bg-panel);
+  color: var(--text-primary);
+}
+
+/* Button inside form */
 form .button {
-  margin-top: 0.6rem;
   grid-column: 2;
+  margin-top: 0.4rem;
+  width: 100%;
 }
 
+/* Form heading */
 form h2 {
   grid-column: 1 / -1;
-  font-size: 2.2rem;
-  text-transform: uppercase;
-  letter-spacing: -0.5px;
-  margin-bottom: 1.6rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  font-family: 'Fraunces', Georgia, serif;
+  font-size: 2rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  letter-spacing: -0.02em;
+  padding-bottom: 1.4rem;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 0.4rem;
+}
+
+form h2 svg {
+  color: var(--accent);
+  flex-shrink: 0;
+}
+
+.neutral {
+  color: var(--text-muted);
+  font-size: 1.2rem;
+}
+
+.button svg {
+  flex-shrink: 0;
+}
+
+/* ═══════════════════════════════════════════
+   SCROLLBAR
+═══════════════════════════════════════════ */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-strong) transparent;
+}
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 99px; }
+
+/* ═══════════════════════════════════════════
+   RESPONSIVE
+═══════════════════════════════════════════ */
+@media (max-width: 720px) {
+  .app {
+    grid-template-columns: 1fr;
+    gap: 2.4rem;
+  }
+  .form-split-bill {
+    grid-template-columns: 1fr 10rem;
+    padding: 2.4rem;
+  }
 }
