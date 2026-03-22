@@ -143,6 +143,14 @@ body::before {
   box-shadow: 0 1px 4px rgba(79,142,247,0.25);
 }
 
+.close-button {
+  background: var(--red);
+}
+
+.close-button:hover {
+  background: #e74c3c;
+}
+
 /* ═══════════════════════════════════════════
    SIDEBAR
 ═══════════════════════════════════════════ */

@@ -13,9 +13,9 @@ import {
   ArrowLeftRight,
 } from "lucide-react";
 
-function Button({ onClickProp, children }) {
+function Button({ onClickProp, children, className = "" }) {
   return (
-    <button className="button" onClick={onClickProp}>
+    <button className={`button ${className}`} onClick={onClickProp}>
       {children}
     </button>
   );
@@ -62,6 +62,7 @@ export default function App() {
 
         <Button
           onClickProp={() => setIsAddFriendFormOpen((open) => !open)}
+          className={isAddFriendFormOpen ? "close-button" : ""}
         >
           {isAddFriendFormOpen ? (
             <>
@@ -120,7 +121,7 @@ function Friend({ friend, selectedFriend, onFriendSelected }) {
         <p className="neutral">You and {friend.name} are even</p>
       )}
 
-      <Button onClickProp={() => onFriendSelected(friend)}>
+      <Button onClickProp={() => onFriendSelected(friend)} className={selectedFriend ? "close-button" : ""}>
         {selectedFriend ? (
           <>
             <X size={13} strokeWidth={2.5} />
